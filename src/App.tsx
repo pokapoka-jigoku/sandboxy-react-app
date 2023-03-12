@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div className="App">
-      <div>
+      <div className="content">
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -16,16 +16,24 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+      <h1 className="title">Vite + React</h1>
+      <div className="box">
+        <div className="container m-2">
+          Count is {count}
+        </div>
+        <div className="container m-2">
+          <button onClick={() => setCount((count) => count + 1)} className="button is-primary m-2">
+            (+)
+          </button>
+          <button onClick={() => setCount((count) => count - 1)} className="button is-danger m-2">
+            (-)
+          </button>
+        </div>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR. And hello, world.
         </p>
       </div>
-      <p className="read-the-docs">
+      <p className="read-the-docs footer">
         Click on the Vite and React logos to learn more
       </p>
     </div>
