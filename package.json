@@ -5,11 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && cp -r dist docs",
-    "rebuild": "tsc && vite build && rm -R docs && cp -r dist docs",
+    "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "git": "git add . && git commit && git push origin main"
+    "make-pages": "rm -R docs && cp -r dist docs"
   },
   "dependencies": {
     "react": "^18.2.0",
