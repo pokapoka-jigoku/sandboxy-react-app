@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "make-pages": "rm -R docs && cp -r dist docs"
+    "make-pages": "rm -R docs && cp -r dist docs",
+    "deploy-magic": "yarn build && yarn make-pages && git add . && git commit && git push origin main && firebase deploy"
   },
   "dependencies": {
     "bulma": "^0.9.4",
