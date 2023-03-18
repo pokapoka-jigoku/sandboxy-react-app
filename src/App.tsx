@@ -1,90 +1,162 @@
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from './assets/vite.svg';
 import './App.css';
+import {Button, Container, Box, Grid, Paper, AppBar, Typography} from "@mui/material";
+import {shadows, spacing, display, grid} from "@mui/system";
 import {  PossessedResources } from './features/PossessedResources';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+
+const Header = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.common.white,
+  padding: theme.spacing(2)
+}));
+const Footer = styled(Box)(({theme}) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.common.white,
+  padding: theme.spacing(1),
+}));
+const InfoBar = styled(Paper)(({theme}) => ({
+  margin: theme.spacing(1),
+  padding: theme.spacing(2)
+}));
+const ButtonMenu = styled(Box)(({theme}) => ({
+  margin: theme.spacing(1)
+}));
 
 function App() {
-  const [possessedResources, setPossessedResources] = useState(new PossessedResources(0, 0, 0, 0, 0))
+  const [possessedResources, setPossessedResources] = useState(new PossessedResources(0, 0, 0, 0, 0));
+  const [infoText, setInfoText] = useState("ここに情報が表示されます。");
+  const iconSet = {
+    wool: "🐑",
+    wood: "🌲",
+    wheat: "🌾",
+    brick: "🧱",
+    ore: "🪨"
+  };
+  const woolProps = {
+    icon: iconSet.wool,
+    name: "羊毛",
+    number: possessedResources.wool,
+    increment: () => {
+      // setInfoText((text) => "Wool was incremented.");
+      setPossessedResources((res) => res.incrementWool());
+    },
+    decrement: () => setPossessedResources((res) => res.decrementWool()),
+  };
+  const woodProps = {
+    icon: iconSet.wood,
+    name: "木材",
+    number: possessedResources.wood,
+    increment: () => setPossessedResources((res) => res.incrementWood()),
+    decrement: () => setPossessedResources((res) => res.decrementWood()),
+  };
+  const wheatProps = {
+    icon: iconSet.wheat,
+    name: "小麦",
+    number: possessedResources.wheat,
+    increment: () => setPossessedResources((res) => res.incrementWheat()),
+    decrement: () => setPossessedResources((res) => res.decrementWheat()),
+  };
+  const brickProps = {
+    icon: iconSet.brick,
+    name: "土材",
+    number: possessedResources.brick,
+    increment: () => setPossessedResources((res) => res.incrementBrick()),
+    decrement: () => setPossessedResources((res) => res.decrementBrick()),
+  };
+  const oreProps = {
+    icon: iconSet.ore,
+    name: "石材",
+    number: possessedResources.ore,
+    increment: () => setPossessedResources((res) => res.incrementOre()),
+    decrement: () => setPossessedResources((res) => res.decrementOre()),
+  };
 
   return (
     <div className="App">
-      <div className="content">
-        <h1 className="title">Katan Dashboard</h1>
-        <div className="box">
-          <div className="card">
-            ここに情報がはいる。
-          </div>
-          <div className="buttons m-3">
-            <button onClick={() => setPossessedResources((res) => res.setToZero())} className="button is-primary is-rounded m-2">
-              初期化
-            </button>
-            <button onClick={() => setPossessedResources((res) => res)} className="button is-primary is-rounded m-2">
-              ＊
-            </button>
-          </div>
-          <div className="box">
-            <div className="columns is-mobile is-variable is-1">
-              <div className="column mx-2">🐑</div>
-              <div className="column mx-2">羊毛</div>
-              <div className="column mx-2">{possessedResources.wool} 個</div>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.incrementWool())}>＋</button>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.decrementWool())}>−</button>
-            </div>
-            <div className="columns is-mobile is-variable is-1">
-              <div className="column mx-2">🌲</div>
-              <div className="column mx-2">木材</div>
-              <div className="column mx-2">{possessedResources.wood} 個</div>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.incrementWood())}>＋</button>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.decrementWood())}>−</button>
-            </div>
-            <div className="columns is-mobile is-variable is-1">
-              <div className="column mx-2">🌾</div>
-              <div className="column mx-2">小麦</div>
-              <div className="column mx-2">{possessedResources.wheat} 個</div>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.incrementWheat())}>＋</button>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.decrementWheat())}>−</button>
-            </div>
-            <div className="columns is-mobile is-variable is-1">
-              <div className="column mx-2">🧱</div>
-              <div className="column mx-2">土材</div>
-              <div className="column mx-2">{possessedResources.brick} 個</div>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.incrementBrick())}>＋</button>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.decrementBrick())}>−</button>
-            </div>
-            <div className="columns is-mobile is-variable is-1">
-              <div className="column mx-2">🪨</div>
-              <div className="column mx-2">石材</div>
-              <div className="column mx-2">{possessedResources.ore} 個</div>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.incrementOre())}>＋</button>
-              <button className="column button is-small is-primary mx-2"
-                onClick={() => setPossessedResources((res) => res.decrementOre())}>−</button>
-            </div>
-          </div>
-          <div className="buttons m-3">
-            <button onClick={() => setPossessedResources((res) => res)} className="button is-primary is-rounded m-2">
-              未実装
-            </button>
-            <button onClick={() => setPossessedResources((res) => res)} className="button is-primary is-rounded m-2">
-              未実装
-            </button>
-          </div>
-        </div>
-        <p className="footer">
-          開発中のアプリのため、動作の保証はありません。
-        </p>
-      </div>
+      <Header>
+        <Typography fontSize="large">Katan Dashboard</Typography>
+      </Header>
+
+      <Container maxWidth="sm">
+        <InfoBar>
+          {infoText}
+        </InfoBar>
+        <ButtonMenu>
+          <Button variant="contained"
+          onClick={() => setPossessedResources((res) => res.setToZero())}
+          sx={{m: 1}}
+          >
+            初期化
+          </Button>
+          <Button variant="contained"
+          onClick={() => setPossessedResources((res) => res)}
+          sx={{m: 1}}
+          >
+            ＊
+          </Button>
+          <Button variant="contained"
+          onClick={() => setPossessedResources((res) => res)}
+          sx={{m: 1}}
+          >
+            ＊
+          </Button>
+        </ButtonMenu>
+        <Paper sx={{m: 1, p: 2}}>
+          <ResourceItemRow {...woolProps}></ResourceItemRow>
+          <ResourceItemRow {...woodProps}></ResourceItemRow>
+          <ResourceItemRow {...wheatProps}></ResourceItemRow>
+          <ResourceItemRow {...brickProps}></ResourceItemRow>
+          <ResourceItemRow {...oreProps}></ResourceItemRow>
+        </Paper>
+        <ButtonMenu>
+          <Button variant="contained"
+          onClick={() => setPossessedResources((res) => res)}
+          sx={{m: 1}}
+          >
+            未実装
+          </Button>
+          <Button variant="contained"
+          onClick={() => setPossessedResources((res) => res)}
+          sx={{m: 1}}
+          >
+            未実装
+          </Button>
+        </ButtonMenu>
+      </Container>
+
+      <Footer>
+        <Typography fontSize="small">開発中のアプリのため、動作の保証はありません。</Typography>
+      </Footer>
     </div>
   )
+}
+
+interface ResourceItemRowProps {
+  icon: String,
+  name: String,
+  number: number,
+  increment: () => void,
+  decrement: () => void,
+};
+
+const ResourceItemRow = (props: ResourceItemRowProps) => {
+  const {icon, name, number, increment, decrement} = props;
+  return (
+    <Grid container spacing={1} alignItems="center" justifyItems="center"
+     sx={{m: 1}}
+    >
+    <Grid item xs={2}><Box>{icon}</Box></Grid>
+    <Grid item xs={2}><Box>{name}</Box></Grid>
+    <Grid item xs={2}><Box>{number} 個</Box></Grid>
+    <Grid item xs={3}>
+      <Button variant="contained" onClick={increment}>＋</Button>
+    </Grid>
+    <Grid item xs={3}>
+      <Button variant="contained" onClick={decrement}>−</Button>
+    </Grid>
+  </Grid>
+);
 }
 
 export default App
