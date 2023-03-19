@@ -1,9 +1,11 @@
+import "react";
 import { useState } from 'react';
 import './App.css';
 import {Button, Container, Box, Grid, Paper, AppBar, Typography} from "@mui/material";
 import {shadows, spacing, display, grid} from "@mui/system";
-import {  PossessedResources } from './features/PossessedResources';
+import { PossessedResources } from './features/PossessedResources';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import {usePossessedResourcesState} from './hooks/usePossessedResourcesState';
 
 const Header = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -24,8 +26,9 @@ const ButtonMenu = styled(Box)(({theme}) => ({
 }));
 
 function App() {
-  const [possessedResources, setPossessedResources] = useState(new PossessedResources(0, 0, 0, 0, 0));
+  // const [possessedResources, setPossessedResources] = useState(new PossessedResources(0, 0, 0, 0, 0));
   const [infoText, setInfoText] = useState("ここに情報が表示されます。");
+  const [possessedResources, increment, decrement, reset] = usePossessedResourcesState();
   const iconSet = {
     wool: "🐑",
     wood: "🌲",
@@ -37,39 +40,36 @@ function App() {
     icon: iconSet.wool,
     name: "羊毛",
     number: possessedResources.wool,
-    increment: () => {
-      // setInfoText((text) => "Wool was incremented.");
-      setPossessedResources((res) => res.incrementWool());
-    },
-    decrement: () => setPossessedResources((res) => res.decrementWool()),
+    increment: () => increment("Wool"),
+    decrement: () => decrement("Wool"),
   };
   const woodProps = {
     icon: iconSet.wood,
     name: "木材",
     number: possessedResources.wood,
-    increment: () => setPossessedResources((res) => res.incrementWood()),
-    decrement: () => setPossessedResources((res) => res.decrementWood()),
+    increment: () => increment("Wood"),
+    decrement: () => decrement("Wood"),
   };
   const wheatProps = {
     icon: iconSet.wheat,
     name: "小麦",
     number: possessedResources.wheat,
-    increment: () => setPossessedResources((res) => res.incrementWheat()),
-    decrement: () => setPossessedResources((res) => res.decrementWheat()),
+    increment: () => increment("Wheat"),
+    decrement: () => decrement("Wheat"),
   };
   const brickProps = {
     icon: iconSet.brick,
     name: "土材",
     number: possessedResources.brick,
-    increment: () => setPossessedResources((res) => res.incrementBrick()),
-    decrement: () => setPossessedResources((res) => res.decrementBrick()),
+    increment: () => increment("Brick"),
+    decrement: () => decrement("Brick"),
   };
   const oreProps = {
     icon: iconSet.ore,
     name: "石材",
     number: possessedResources.ore,
-    increment: () => setPossessedResources((res) => res.incrementOre()),
-    decrement: () => setPossessedResources((res) => res.decrementOre()),
+    increment: () => increment("Ore"),
+    decrement: () => decrement("Ore"),
   };
 
   return (
@@ -84,22 +84,10 @@ function App() {
         </InfoBar>
         <ButtonMenu>
           <Button variant="contained"
-          onClick={() => setPossessedResources((res) => res.setToZero())}
+          onClick={reset}
           sx={{m: 1}}
           >
             初期化
-          </Button>
-          <Button variant="contained"
-          onClick={() => setPossessedResources((res) => res)}
-          sx={{m: 1}}
-          >
-            ＊
-          </Button>
-          <Button variant="contained"
-          onClick={() => setPossessedResources((res) => res)}
-          sx={{m: 1}}
-          >
-            ＊
           </Button>
         </ButtonMenu>
         <Paper sx={{m: 1, p: 2}}>
@@ -111,13 +99,13 @@ function App() {
         </Paper>
         <ButtonMenu>
           <Button variant="contained"
-          onClick={() => setPossessedResources((res) => res)}
+          onClick={() => undefined}
           sx={{m: 1}}
           >
             未実装
           </Button>
           <Button variant="contained"
-          onClick={() => setPossessedResources((res) => res)}
+          onClick={() => undefined}
           sx={{m: 1}}
           >
             未実装
@@ -140,7 +128,7 @@ interface ResourceItemRowProps {
   decrement: () => void,
 };
 
-const ResourceItemRow = (props: ResourceItemRowProps) => {
+const ResourceItemRow: React.FC<ResourceItemRowProps> = (props: ResourceItemRowProps) => {
   const {icon, name, number, increment, decrement} = props;
   return (
     <Grid container spacing={1} alignItems="center" justifyItems="center"

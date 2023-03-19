@@ -1,20 +1,14 @@
 
 class PossessedResources {
-    readonly wool: number;
-    readonly wood: number;
-    readonly wheat: number;
-    readonly brick: number;
-    readonly ore: number;
+    constructor(
+        readonly wool: number = 0,
+        readonly wood: number = 0,
+        readonly wheat: number = 0,
+        readonly brick: number = 0,
+        readonly ore: number = 0
+    ){}
 
-    constructor(wool: number, wood: number, wheat: number, brick: number, ore: number){
-        this.wool = wool;
-        this.wood = wood;
-        this.wheat = wheat;
-        this.brick = brick;
-        this.ore = ore;
-    }
-
-    incrementWool(this: PossessedResources): PossessedResources {
+    incrementWool(): PossessedResources {
         return new PossessedResources(
             this.wool + 1,
             this.wood,
@@ -24,7 +18,7 @@ class PossessedResources {
         );
     }
     
-    incrementWood(this: PossessedResources): PossessedResources {
+    incrementWood(): PossessedResources {
         return new PossessedResources(
             this.wool,
             this.wood + 1,
@@ -34,7 +28,7 @@ class PossessedResources {
         );
     }
     
-    incrementWheat(this: PossessedResources): PossessedResources {
+    incrementWheat(): PossessedResources {
         return new PossessedResources(
             this.wool,
             this.wood,
@@ -44,7 +38,7 @@ class PossessedResources {
         );
     }
     
-    incrementBrick(this: PossessedResources): PossessedResources {
+    incrementBrick(): PossessedResources {
         return new PossessedResources(
             this.wool,
             this.wood,
@@ -54,7 +48,7 @@ class PossessedResources {
         );
     }
     
-    incrementOre(this: PossessedResources): PossessedResources {
+    incrementOre(): PossessedResources {
         return new PossessedResources(
             this.wool,
             this.wood,
@@ -64,7 +58,7 @@ class PossessedResources {
         );
     }
     
-    decrementWool(this: PossessedResources): PossessedResources {
+    decrementWool(): PossessedResources {
         if(this.wool <= 0){
             return this;
         }
@@ -77,7 +71,7 @@ class PossessedResources {
         );
     }
     
-    decrementWood(this: PossessedResources): PossessedResources {
+    decrementWood(): PossessedResources {
         if(this.wood <= 0){
             return this;
         }
@@ -90,7 +84,7 @@ class PossessedResources {
         );
     }
     
-    decrementWheat(this: PossessedResources): PossessedResources {
+    decrementWheat(): PossessedResources {
         if(this.wheat <= 0){
             return this;
         }
@@ -103,7 +97,7 @@ class PossessedResources {
         );
     }
     
-    decrementBrick(this: PossessedResources): PossessedResources {
+    decrementBrick(): PossessedResources {
         if(this.brick <= 0){
             return this;
         }
@@ -116,7 +110,7 @@ class PossessedResources {
         );
     }
     
-    decrementOre(this: PossessedResources): PossessedResources {
+    decrementOre(): PossessedResources {
         if(this.ore <= 0){
             return this;
         }
@@ -129,7 +123,7 @@ class PossessedResources {
         );
     }
 
-    setToZero(this: PossessedResources): PossessedResources{
+    setToZero(): PossessedResources{
         return new PossessedResources(0, 0, 0, 0, 0);
     }
 
