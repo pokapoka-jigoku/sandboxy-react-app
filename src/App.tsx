@@ -3,7 +3,7 @@ import { useState } from 'react';
 import './App.css';
 import {Button, Container, Box, Grid, Paper, AppBar, Typography} from "@mui/material";
 import {shadows, spacing, display, grid} from "@mui/system";
-import { PossessedResources } from './features/PossessedResources';
+import { PossessedResources, CanInvestSpecification } from './features/PossessedResources';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import {usePossessedResourcesState} from './hooks/usePossessedResourcesState';
 
@@ -28,7 +28,7 @@ const ButtonMenu = styled(Box)(({theme}) => ({
 function App() {
   // const [possessedResources, setPossessedResources] = useState(new PossessedResources(0, 0, 0, 0, 0));
   const [infoText, setInfoText] = useState("ここに情報が表示されます。");
-  const [possessedResources, increment, decrement, reset] = usePossessedResourcesState();
+  const [possessedResources, increment, decrement, invest, reset] = usePossessedResourcesState();
   const iconSet = {
     wool: "🐑",
     wood: "🌲",
@@ -36,40 +36,91 @@ function App() {
     brick: "🧱",
     ore: "🪨"
   };
-  const woolProps = {
+  const woolProps: ResourceItemRowProps = {
     icon: iconSet.wool,
     name: "羊毛",
     number: possessedResources.wool,
-    increment: () => increment("Wool"),
-    decrement: () => decrement("Wool"),
+    increment: () => {
+      increment("Wool")();
+      setInfoText(`羊毛を１つ増やしました（${possessedResources.wool + 1} 個）`);
+    },
+    decrement: () => {
+      decrement("Wool")();
+      if(possessedResources.wool < 1) {
+        setInfoText(`羊毛を持っていません。`);
+      } else {
+        setInfoText(`羊毛を１つ減らしました（${possessedResources.wool - 1} 個）`);
+      }
+    },
   };
-  const woodProps = {
+  const woodProps: ResourceItemRowProps = {
     icon: iconSet.wood,
     name: "木材",
     number: possessedResources.wood,
-    increment: () => increment("Wood"),
-    decrement: () => decrement("Wood"),
+    increment: () => {
+      increment("Wood")();
+      setInfoText(`木材を１つ増やしました（${possessedResources.wood + 1} 個）`);
+    },
+    decrement: () => {
+      decrement("Wood")();
+      if(possessedResources.wood < 1) {
+        setInfoText(`木材を持っていません。`);
+      } else {
+        setInfoText(`木材を１つ減らしました（${possessedResources.wood - 1} 個）`);
+      }
+    },
   };
-  const wheatProps = {
+  const wheatProps: ResourceItemRowProps = {
     icon: iconSet.wheat,
     name: "小麦",
     number: possessedResources.wheat,
-    increment: () => increment("Wheat"),
-    decrement: () => decrement("Wheat"),
+    increment: () => {
+      increment("Wheat")();
+      setInfoText(`小麦を１つ増やしました（${possessedResources.wheat + 1} 個）`);
+    },
+    decrement: () => {
+      decrement("Wheat")();
+      if(possessedResources.wheat < 1) {
+        setInfoText(`小麦を持っていません。`);
+      } else {
+        setInfoText(`小麦を１つ減らしました（${possessedResources.wheat - 1} 個）`);
+      }
+    },
   };
-  const brickProps = {
+  const brickProps: ResourceItemRowProps = {
     icon: iconSet.brick,
     name: "土材",
     number: possessedResources.brick,
-    increment: () => increment("Brick"),
-    decrement: () => decrement("Brick"),
+    increment: () => {
+      increment("Brick")();
+      setInfoText(`土材を１つ増やしました（${possessedResources.brick + 1} 個）`);
+    },
+    decrement: () => {
+      decrement("Brick")();
+      if(possessedResources.brick < 1) {
+        setInfoText(`土材を持っていません。`);
+      } else {
+        setInfoText(`土材を１つ減らしました（${possessedResources.brick - 1} 個）`);
+      }
+    },
   };
-  const oreProps = {
+
+  const oreProps: ResourceItemRowProps = {
     icon: iconSet.ore,
     name: "石材",
     number: possessedResources.ore,
-    increment: () => increment("Ore"),
-    decrement: () => decrement("Ore"),
+    increment: () => {
+      increment("Ore")();
+      setInfoText(`石材を１つ増やしました（${possessedResources.ore + 1} 個）`);
+    },
+    decrement: () => {
+      decrement("Ore")();
+      if(possessedResources.ore < 1) {
+        setInfoText(`石材を持っていません。`);
+      } else {
+        setInfoText(`石材を１つ減らしました（${possessedResources.ore - 1} 個）`);
+      }
+    },
   };
 
   return (
@@ -78,13 +129,16 @@ function App() {
         <Typography fontSize="large">Katan Dashboard</Typography>
       </Header>
 
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <InfoBar>
           {infoText}
         </InfoBar>
         <ButtonMenu>
           <Button variant="contained"
-          onClick={reset}
+          onClick={() => {
+            setInfoText("手持ち資源をリセットしました。");
+            reset();
+          }}
           sx={{m: 1}}
           >
             初期化
@@ -98,17 +152,57 @@ function App() {
           <ResourceItemRow {...oreProps}></ResourceItemRow>
         </Paper>
         <ButtonMenu>
-          <Button variant="contained"
-          onClick={() => undefined}
+          <Button variant="outlined"
+          onClick={() => {
+            if(new CanInvestSpecification().isSatisfiedForRoadBy(possessedResources)){
+              invest("Road")();
+              setInfoText("街道をつくりました！");
+            } else {
+              setInfoText("資源が足りません。");
+            }
+          }}
           sx={{m: 1}}
           >
-            未実装
+            街道　{iconSet.brick}{iconSet.wood}
           </Button>
-          <Button variant="contained"
-          onClick={() => undefined}
+          <Button variant="outlined"
+          onClick={() => {
+            if(new CanInvestSpecification().isSatisfiedForFrontierBy(possessedResources)){
+              invest("Frontier")();
+              setInfoText("開拓地をつくりました！");
+            } else {
+              setInfoText("資源が足りません。");
+            }
+          }}
           sx={{m: 1}}
           >
-            未実装
+            開拓地　{iconSet.brick}{iconSet.wood}{iconSet.wheat}{iconSet.wool}
+          </Button>
+          <Button variant="outlined"
+          onClick={() => {
+            if(new CanInvestSpecification().isSatisfiedForUrbanizationBy(possessedResources)){
+              invest("Urbanization")();
+              setInfoText("都市をつくりました！");
+            } else {
+              setInfoText("資源が足りません。");
+            }
+          }}
+          sx={{m: 1}}
+          >
+            都市　{iconSet.wheat}{iconSet.wheat}{iconSet.ore}{iconSet.ore}{iconSet.ore}
+          </Button>
+          <Button variant="outlined"
+          onClick={() => {
+            if(new CanInvestSpecification().isSatisfiedForDevelopmentBy(possessedResources)){
+              invest("Development")();
+              setInfoText("開発を行ないました！");
+            } else {
+              setInfoText("資源が足りません。");
+            }
+          }}
+          sx={{m: 1}}
+          >
+            発展　{iconSet.wheat}{iconSet.ore}{iconSet.wool}
           </Button>
         </ButtonMenu>
       </Container>
